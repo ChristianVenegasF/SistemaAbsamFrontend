@@ -1,0 +1,121 @@
+/* ComprasPage.module.css */
+
+/* Contenedor principal */
+.container {
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* Título */
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* Tabla de productos */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table th, .table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.table thead {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table tbody tr:hover {
+  background-color: #e0f0ff;
+  cursor: pointer;
+}
+
+/* Botones */
+.button {
+  padding: 6px 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: 400px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  border-radius: 12px;
+  z-index: 1000;
+}
+
+.modal h3 {
+  margin-bottom: 20px;
+  color: #007bff;
+  text-align: center;
+}
+
+.modal input {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.modal .button {
+  width: 48%;
+  margin-right: 4%;
+}
+
+.modal .button:last-child {
+  margin-right: 0;
+  background-color: #dc3545;
+}
+
+.modal .button:last-child:hover {
+  background-color: #c82333;
+}
+
+/* Fondo oscuro detrás del modal */
+.modal::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
+  z-index: -1;
+}

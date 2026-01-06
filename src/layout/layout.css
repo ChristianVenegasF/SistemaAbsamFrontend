@@ -1,0 +1,50 @@
+/* Layout general */
+.layout {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: #1e293b;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Logo */
+.logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Menú */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Botones */
+.menu-btn {
+  background-color: #334155;
+  border: none;
+  color: white;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-align: left;
+}
+
+.menu-btn:hover {
+  background-color: #475569;
+}
+
+/* Contenido derecho */
+.content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f1f5f9;
+}
