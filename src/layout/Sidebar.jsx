@@ -6,7 +6,7 @@ const Sidebar = () => {
 
   return (
     <aside className="sidebar">
-      <h2 className="logo">ABSAM</h2>
+      <h2 className="logo"><img src="../assets/logoabsam.jpeg" alt="" /></h2>
 
       <nav className="menu">
         <Link
