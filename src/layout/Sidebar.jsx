@@ -21,7 +21,7 @@ const Sidebar = () => {
           fontSize: '1.2rem',
           fontWeight: 'normal'
         }}>
-          Sistema ABSAM
+          
         </h2>
       </div>
 
