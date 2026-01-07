@@ -138,7 +138,7 @@ const ProductosPage = () => {
         <div className={styles.statCard}>
           <div className={styles.statIcon}>💰</div>
           <div className={styles.statTitle}>Valor Total</div>
-          <div className={styles.statValue}>${stats.valorTotal.toLocaleString()}</div>
+          <div className={styles.statValue}>S/.{stats.valorTotal.toLocaleString()}</div>
         </div>
         
         <div className={styles.statCard}>
@@ -196,7 +196,7 @@ const ProductosPage = () => {
                   <td className={styles.idCell}>#{producto.idProducto}</td>
                   <td className={styles.nameCell}>{producto.nombre}</td>
                   <td className={styles.priceCell}>
-                    ${producto.precio.toLocaleString()}
+                    S/.{producto.precio.toLocaleString()}
                   </td>
                   <td className={styles.stockCell}>
                     {producto.stock.toLocaleString()} unidades

@@ -119,10 +119,10 @@ const ProductoForm = ({ onGuardar, productoEditando, onCancelar }) => {
 
         <div className={styles.inputGroup}>
           <label className={styles.inputLabel}>
-            Precio (USD) *
+            Precio (PEN) *
           </label>
           <div className={styles.inputWithIcon}>
-            <span className={styles.currency}>$</span>
+            <span className={styles.currency}>S/.</span>
             <input
               type="number"
               name="precio"
