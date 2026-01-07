@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import logo from '../assets/logoabsam.jpeg';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -13,7 +14,7 @@ const Sidebar = () => {
   return (
     <aside className="sidebar">
       <div className="logo">
-        <img src="../assets/logoabsam.jpeg" alt="Logo ABSAM" />
+        <img src={logo} alt="Logo ABSAM" />
         <h2 style={{ 
           color: 'white', 
           marginTop: '10px', 
