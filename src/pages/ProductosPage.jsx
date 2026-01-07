@@ -14,6 +14,11 @@ const ProductosPage = () => {
   const [loading, setLoading] = useState(true);
   const [formVisible, setFormVisible] = useState(false);
   const [toast, setToast] = useState(null);
+  
+  // NUEVOS ESTADOS PARA BÚSQUEDA Y PAGINACIÓN
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Por defecto 10
 
   useEffect(() => {
     cargarProductos();
@@ -24,12 +29,24 @@ const ProductosPage = () => {
     try {
       const res = await obtenerProductos();
       setProductos(res.data);
+      setCurrentPage(1); // Resetear a página 1 al cargar nuevos datos
     } catch (error) {
       mostrarToast('Error', 'No se pudieron cargar los productos', 'error');
     } finally {
       setLoading(false);
     }
   };
+
+  // FUNCIÓN DE BÚSQUEDA
+  const filteredProductos = productos.filter(producto =>
+    producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // CÁLCULOS DE PAGINACIÓN
+  const totalPages = Math.ceil(filteredProductos.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProductos = filteredProductos.slice(startIndex, endIndex);
 
   const mostrarToast = (titulo, mensaje, tipo = 'info') => {
     setToast({ titulo, mensaje, tipo });
@@ -78,15 +95,28 @@ const ProductosPage = () => {
   };
 
   const calcularEstadisticas = () => {
-    const totalProductos = productos.length;
-    const totalStock = productos.reduce((sum, p) => sum + p.stock, 0);
-    const valorTotal = productos.reduce((sum, p) => sum + (p.precio * p.stock), 0);
-    const sinStock = productos.filter(p => p.stock === 0).length;
+    const totalProductos = filteredProductos.length; // Usar productos filtrados
+    const totalStock = filteredProductos.reduce((sum, p) => sum + p.stock, 0);
+    const valorTotal = filteredProductos.reduce((sum, p) => sum + (p.precio * p.stock), 0);
+    const sinStock = filteredProductos.filter(p => p.stock === 0).length;
     
     return { totalProductos, totalStock, valorTotal, sinStock };
   };
 
   const stats = calcularEstadisticas();
+
+  // FUNCIONES DE PAGINACIÓN
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      window.scrollTo({ top: 500, behavior: 'smooth' });
+    }
+  };
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(parseInt(e.target.value));
+    setCurrentPage(1); // Resetear a primera página
+  };
 
   if (loading) {
     return (
@@ -162,6 +192,58 @@ const ProductosPage = () => {
         </div>
       )}
 
+      {/* Barra de búsqueda y controles */}
+      <div className={styles.controlsContainer}>
+        <div className={styles.searchContainer}>
+          <div className={styles.searchInputWrapper}>
+            <span className={styles.searchIcon}>🔍</span>
+            <input
+              type="text"
+              placeholder="Buscar productos por nombre..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1); // Resetear a página 1 al buscar
+              }}
+              className={styles.searchInput}
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm("")}
+                className={styles.clearSearchButton}
+                title="Limpiar búsqueda"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+          {searchTerm && (
+            <div className={styles.searchResults}>
+              {filteredProductos.length} producto{filteredProductos.length !== 1 ? 's' : ''} encontrado{filteredProductos.length !== 1 ? 's' : ''}
+            </div>
+          )}
+        </div>
+
+        <div className={styles.paginationControls}>
+          <div className={styles.itemsPerPage}>
+            <label htmlFor="itemsPerPage" className={styles.paginationLabel}>
+              Mostrar:
+            </label>
+            <select
+              id="itemsPerPage"
+              value={itemsPerPage}
+              onChange={handleItemsPerPageChange}
+              className={styles.itemsPerPageSelect}
+            >
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       {/* Tabla de productos */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
@@ -177,21 +259,37 @@ const ProductosPage = () => {
           </thead>
 
           <tbody>
-            {productos.length === 0 ? (
+            {currentProductos.length === 0 ? (
               <tr>
                 <td colSpan="6" className={styles.emptyState}>
-                  <div className={styles.emptyIcon}>📦</div>
-                  <p>No hay productos registrados</p>
-                  <button
-                    className={`${styles.button} ${styles.buttonPrimary} ${styles.buttonOutline}`}
-                    onClick={() => setFormVisible(true)}
-                  >
-                    Crear primer producto
-                  </button>
+                  <div className={styles.emptyIcon}>
+                    {searchTerm ? "🔍" : "📦"}
+                  </div>
+                  <p>
+                    {searchTerm 
+                      ? `No se encontraron productos con "${searchTerm}"`
+                      : "No hay productos registrados"}
+                  </p>
+                  {!searchTerm && (
+                    <button
+                      className={`${styles.button} ${styles.buttonPrimary} ${styles.buttonOutline}`}
+                      onClick={() => setFormVisible(true)}
+                    >
+                      Crear primer producto
+                    </button>
+                  )}
+                  {searchTerm && (
+                    <button
+                      className={`${styles.button} ${styles.buttonOutline}`}
+                      onClick={() => setSearchTerm("")}
+                    >
+                      Limpiar búsqueda
+                    </button>
+                  )}
                 </td>
               </tr>
             ) : (
-              productos.map((producto) => (
+              currentProductos.map((producto) => (
                 <tr key={producto.idProducto} className={styles.slideIn}>
                   <td className={styles.idCell}>#{producto.idProducto}</td>
                   <td className={styles.nameCell}>{producto.nombre}</td>
@@ -230,6 +328,73 @@ const ProductosPage = () => {
             )}
           </tbody>
         </table>
+
+        {/* Controles de paginación */}
+        {filteredProductos.length > itemsPerPage && (
+          <div className={styles.paginationFooter}>
+            <div className={styles.paginationInfo}>
+              Mostrando {startIndex + 1} - {Math.min(endIndex, filteredProductos.length)} de {filteredProductos.length} productos
+            </div>
+            <div className={styles.paginationButtons}>
+              <button
+                onClick={() => goToPage(1)}
+                disabled={currentPage === 1}
+                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : ''}`}
+                title="Primera página"
+              >
+                ««
+              </button>
+              <button
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : ''}`}
+                title="Página anterior"
+              >
+                «
+              </button>
+              
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+                
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => goToPage(pageNum)}
+                    className={`${styles.paginationButton} ${currentPage === pageNum ? styles.active : ''}`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+              
+              <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`${styles.paginationButton} ${currentPage === totalPages ? styles.disabled : ''}`}
+                title="Página siguiente"
+              >
+                »
+              </button>
+              <button
+                onClick={() => goToPage(totalPages)}
+                disabled={currentPage === totalPages}
+                className={`${styles.paginationButton} ${currentPage === totalPages ? styles.disabled : ''}`}
+                title="Última página"
+              >
+                »»
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Toast Notifications */}
