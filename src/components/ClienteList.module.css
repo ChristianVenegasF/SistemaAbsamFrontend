@@ -1,0 +1,379 @@
+/* Contenedor principal */
+.tableWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Selector de items por página */
+.pageSizeSelector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.pageSizeLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+.pageSizeSelect {
+  padding: 0.5rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e293b;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+}
+
+.pageSizeSelect:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.pageInfo {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Contenedor de la tabla */
+.tableContainer {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+/* Cabeceras de la tabla */
+.tableHead {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #475569;
+  background: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+/* Filas de la tabla */
+.tableRow {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.2s;
+}
+
+.tableRow:hover {
+  background-color: #f8fafc;
+}
+
+/* Celdas de la tabla */
+.tableCell {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.idBadge {
+  background: #edf2f7;
+  color: #4a5568;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.cellContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cellText {
+  font-size: 0.95rem;
+  color: #2d3748;
+  font-weight: 500;
+}
+
+.emailLink {
+  color: #667eea;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.emailLink:hover {
+  color: #5a67d8;
+  text-decoration: underline;
+}
+
+.phoneLink {
+  color: #4a5568;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.phoneLink:hover {
+  color: #2d3748;
+  text-decoration: underline;
+}
+
+.addressText {
+  font-size: 0.9rem;
+  color: #718096;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emptyText {
+  color: #a0aec0;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editButton,
+.deleteButton {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.editButton {
+  background: #ebf8ff;
+  color: #3182ce;
+  border: 1px solid #bee3f8;
+}
+
+.editButton:hover {
+  background: #bee3f8;
+}
+
+.deleteButton {
+  background: #fff5f5;
+  color: #e53e3e;
+  border: 1px solid #fed7d7;
+}
+
+.deleteButton:hover {
+  background: #fed7d7;
+}
+
+.buttonIcon {
+  font-size: 0.9rem;
+}
+
+.buttonText {
+  font-size: 0.875rem;
+}
+
+/* Estado vacío */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: white;
+  border-radius: 16px;
+  border: 2px dashed #e2e8f0;
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.emptyTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 0.5rem 0;
+}
+
+.emptyMessage {
+  color: #718096;
+  font-size: 1rem;
+  max-width: 400px;
+  margin: 0;
+}
+
+/* Paginación */
+.paginationContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.paginationInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 180px;
+}
+
+.paginationText {
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.paginationText strong {
+  color: #1e293b;
+}
+
+.paginationCount {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.paginationButton {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  background: white;
+  color: #475569;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.paginationButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageNumbers {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.pageNumber {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  background: white;
+  color: #475569;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pageNumber:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.activePage {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.pageEllipsis {
+  padding: 0.5rem 0.25rem;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.pageJump {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pageJumpInput {
+  padding: 0.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  width: 50px;
+  text-align: center;
+}
+
+.pageJumpInput:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.pageJumpLabel {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .paginationContainer {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .pageSizeSelector {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+  }
+  
+  .buttonText {
+    display: none;
+  }
+  
+  .editButton,
+  .deleteButton {
+    justify-content: center;
+  }
+}
