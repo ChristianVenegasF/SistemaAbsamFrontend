@@ -4,15 +4,52 @@ import styles from './ClienteList.module.css';
 const ClienteList = ({ clientes, onEdit, onDelete }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [sortField, setSortField] = useState('id');
+  const [sortDirection, setSortDirection] = useState('desc');
+
+  // Ordenar clientes
+  const sortedClientes = [...clientes].sort((a, b) => {
+    let aValue = a[sortField];
+    let bValue = b[sortField];
+    
+    if (sortField === 'id') {
+      aValue = parseInt(aValue) || 0;
+      bValue = parseInt(bValue) || 0;
+    }
+    
+    if (sortField === 'dni') {
+      aValue = parseInt(aValue) || 0;
+      bValue = parseInt(bValue) || 0;
+    }
+    
+    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
 
   // Calcular paginación
-  const totalItems = clientes.length;
+  const totalItems = sortedClientes.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
   
   // Obtener clientes para la página actual
-  const currentPageClientes = clientes.slice(startIndex, endIndex);
+  const currentPageClientes = sortedClientes.slice(startIndex, endIndex);
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+    setCurrentPage(1);
+  };
+
+  const getSortIcon = (field) => {
+    if (sortField !== field) return '↕️';
+    return sortDirection === 'asc' ? '↑' : '↓';
+  };
 
   if (clientes.length === 0) {
     return (
@@ -25,10 +62,6 @@ const ClienteList = ({ clientes, onEdit, onDelete }) => {
       </div>
     );
   }
-
-  const getClienteId = (cliente, index) => {
-    return cliente.id_cliente || `temp-${startIndex + index}`;
-  };
 
   // Funciones de paginación
   const goToPage = (page) => {
@@ -98,96 +131,106 @@ const ClienteList = ({ clientes, onEdit, onDelete }) => {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th className={styles.tableHead}>ID</th>
-              <th className={styles.tableHead}>Nombre</th>
-              <th className={styles.tableHead}>Apellido</th>
+              <th className={styles.tableHead} onClick={() => handleSort('id')}>
+                <div className={styles.sortableHeader}>
+                  ID {getSortIcon('id')}
+                </div>
+              </th>
+              <th className={styles.tableHead} onClick={() => handleSort('dni')}>
+                <div className={styles.sortableHeader}>
+                  DNI {getSortIcon('dni')}
+                </div>
+              </th>
+              <th className={styles.tableHead} onClick={() => handleSort('nombre')}>
+                <div className={styles.sortableHeader}>
+                  Nombre {getSortIcon('nombre')}
+                </div>
+              </th>
+              <th className={styles.tableHead} onClick={() => handleSort('apellido')}>
+                <div className={styles.sortableHeader}>
+                  Apellido {getSortIcon('apellido')}
+                </div>
+              </th>
               <th className={styles.tableHead}>Email</th>
               <th className={styles.tableHead}>Teléfono</th>
-              <th className={styles.tableHead}>Dirección</th>
               <th className={styles.tableHead}>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {currentPageClientes.map((cliente, index) => {
-              const clienteId = getClienteId(cliente, index);
-              
-              return (
-                <tr key={`cliente-${clienteId}`} className={styles.tableRow}>
-                  <td className={styles.tableCell}>
-                    <span className={styles.idBadge}>#{clienteId}</span>
-                  </td>
-                  <td className={styles.tableCell}>
-                    <div className={styles.cellContent}>
-                      <span className={styles.cellText}>{cliente.nombre || '-'}</span>
-                    </div>
-                  </td>
-                  <td className={styles.tableCell}>
-                    <div className={styles.cellContent}>
-                      <span className={styles.cellText}>{cliente.apellido || '-'}</span>
-                    </div>
-                  </td>
-                  <td className={styles.tableCell}>
-                    <div className={styles.cellContent}>
-                      {cliente.email ? (
-                        <a 
-                          href={`mailto:${cliente.email}`} 
-                          className={styles.emailLink}
-                        >
-                          {cliente.email}
-                        </a>
-                      ) : (
-                        <span className={styles.emptyText}>—</span>
-                      )}
-                    </div>
-                  </td>
-                  <td className={styles.tableCell}>
-                    <div className={styles.cellContent}>
-                      {cliente.telefono ? (
-                        <a 
-                          href={`tel:${cliente.telefono}`} 
-                          className={styles.phoneLink}
-                        >
-                          {cliente.telefono}
-                        </a>
-                      ) : (
-                        <span className={styles.emptyText}>—</span>
-                      )}
-                    </div>
-                  </td>
-                  <td className={styles.tableCell}>
-                    <div className={styles.cellContent}>
-                      <span className={styles.addressText} title={cliente.direccion}>
-                        {cliente.direccion ? (
-                          cliente.direccion.length > 25 
-                            ? `${cliente.direccion.substring(0, 25)}...`
-                            : cliente.direccion
-                        ) : (
-                          <span className={styles.emptyText}>—</span>
-                        )}
-                      </span>
-                    </div>
-                  </td>
-                  <td className={styles.tableCell}>
-                    <div className={styles.actionButtons}>
-                      <button 
-                        className={styles.editButton}
-                        onClick={() => onEdit(cliente)}
+            {currentPageClientes.map((cliente) => (
+              <tr key={`cliente-${cliente.id}`} className={styles.tableRow}>
+                <td className={styles.tableCell}>
+                  <span className={styles.idBadge}>#{cliente.id}</span>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.cellContent}>
+                    <span className={styles.dniText}>{cliente.dni || '-'}</span>
+                  </div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.cellContent}>
+                    <span className={styles.cellText}>{cliente.nombre || '-'}</span>
+                  </div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.cellContent}>
+                    <span className={styles.cellText}>{cliente.apellido || '-'}</span>
+                  </div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.cellContent}>
+                    {cliente.email ? (
+                      <a 
+                        href={`mailto:${cliente.email}`} 
+                        className={styles.emailLink}
+                        title={cliente.email}
                       >
-                        <span className={styles.buttonIcon}>✏️</span>
-                        <span className={styles.buttonText}>Editar</span>
-                      </button>
-                      <button 
-                        className={styles.deleteButton}
-                        onClick={() => onDelete(clienteId)}
+                        {cliente.email.length > 20 
+                          ? `${cliente.email.substring(0, 20)}...` 
+                          : cliente.email}
+                      </a>
+                    ) : (
+                      <span className={styles.emptyText}>—</span>
+                    )}
+                  </div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.cellContent}>
+                    {cliente.telefono ? (
+                      <a 
+                        href={`tel:${cliente.telefono}`} 
+                        className={styles.phoneLink}
+                        title={cliente.telefono}
                       >
-                        <span className={styles.buttonIcon}>🗑️</span>
-                        <span className={styles.buttonText}>Eliminar</span>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                        {cliente.telefono}
+                      </a>
+                    ) : (
+                      <span className={styles.emptyText}>—</span>
+                    )}
+                  </div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.actionButtons}>
+                    <button 
+                      className={styles.editButton}
+                      onClick={() => onEdit(cliente)}
+                      title="Editar cliente"
+                    >
+                      <span className={styles.buttonIcon}>✏️</span>
+                      <span className={styles.buttonText}>Editar</span>
+                    </button>
+                    <button 
+                      className={styles.deleteButton}
+                      onClick={() => onDelete(cliente.id)}
+                      title="Eliminar cliente"
+                    >
+                      <span className={styles.buttonIcon}>🗑️</span>
+                      <span className={styles.buttonText}>Eliminar</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -208,6 +251,7 @@ const ClienteList = ({ clientes, onEdit, onDelete }) => {
             className={styles.paginationButton}
             onClick={() => goToPage(1)}
             disabled={currentPage === 1}
+            title="Primera página"
           >
             ««
           </button>
@@ -216,6 +260,7 @@ const ClienteList = ({ clientes, onEdit, onDelete }) => {
             className={styles.paginationButton}
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}
+            title="Página anterior"
           >
             «
           </button>
@@ -231,6 +276,7 @@ const ClienteList = ({ clientes, onEdit, onDelete }) => {
                   key={page}
                   className={`${styles.pageNumber} ${currentPage === page ? styles.activePage : ''}`}
                   onClick={() => goToPage(page)}
+                  title={`Página ${page}`}
                 >
                   {page}
                 </button>
@@ -242,6 +288,7 @@ const ClienteList = ({ clientes, onEdit, onDelete }) => {
             className={styles.paginationButton}
             onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage === totalPages}
+            title="Página siguiente"
           >
             »
           </button>
@@ -250,26 +297,10 @@ const ClienteList = ({ clientes, onEdit, onDelete }) => {
             className={styles.paginationButton}
             onClick={() => goToPage(totalPages)}
             disabled={currentPage === totalPages}
+            title="Última página"
           >
             »»
           </button>
-        </div>
-        
-        <div className={styles.pageJump}>
-          <input
-            type="number"
-            min="1"
-            max={totalPages}
-            value={currentPage}
-            onChange={(e) => {
-              const page = parseInt(e.target.value);
-              if (page >= 1 && page <= totalPages) {
-                setCurrentPage(page);
-              }
-            }}
-            className={styles.pageJumpInput}
-          />
-          <span className={styles.pageJumpLabel}> de {totalPages}</span>
         </div>
       </div>
     </div>

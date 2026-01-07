@@ -10,6 +10,11 @@ export const obtenerClientePorId = (id) => {
   return api.get(`/clientes/${id}`);
 };
 
+// Obtener cliente por DNI
+export const obtenerClientePorDni = (dni) => {
+  return api.get(`/clientes/dni/${dni}`);
+};
+
 // Crear cliente
 export const crearCliente = (cliente) => {
   return api.post("/clientes", cliente);
@@ -23,9 +28,4 @@ export const actualizarCliente = (id, cliente) => {
 // Eliminar cliente
 export const eliminarCliente = (id) => {
   return api.delete(`/clientes/${id}`);
-};
-
-// Buscar clientes (opcional - si tu API tiene endpoint de búsqueda)
-export const buscarClientes = (termino) => {
-  return api.get(`/clientes/buscar?q=${termino}`);
 };
