@@ -15,10 +15,9 @@ const ProductosPage = () => {
   const [formVisible, setFormVisible] = useState(false);
   const [toast, setToast] = useState(null);
   
-  // NUEVOS ESTADOS PARA BÚSQUEDA Y PAGINACIÓN
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Por defecto 10
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     cargarProductos();
@@ -29,7 +28,7 @@ const ProductosPage = () => {
     try {
       const res = await obtenerProductos();
       setProductos(res.data);
-      setCurrentPage(1); // Resetear a página 1 al cargar nuevos datos
+      setCurrentPage(1);
     } catch (error) {
       mostrarToast('Error', 'No se pudieron cargar los productos', 'error');
     } finally {
@@ -37,12 +36,10 @@ const ProductosPage = () => {
     }
   };
 
-  // FUNCIÓN DE BÚSQUEDA
   const filteredProductos = productos.filter(producto =>
     producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // CÁLCULOS DE PAGINACIÓN
   const totalPages = Math.ceil(filteredProductos.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -95,7 +92,7 @@ const ProductosPage = () => {
   };
 
   const calcularEstadisticas = () => {
-    const totalProductos = filteredProductos.length; // Usar productos filtrados
+    const totalProductos = filteredProductos.length;
     const totalStock = filteredProductos.reduce((sum, p) => sum + p.stock, 0);
     const valorTotal = filteredProductos.reduce((sum, p) => sum + (p.precio * p.stock), 0);
     const sinStock = filteredProductos.filter(p => p.stock === 0).length;
@@ -105,7 +102,6 @@ const ProductosPage = () => {
 
   const stats = calcularEstadisticas();
 
-  // FUNCIONES DE PAGINACIÓN
   const goToPage = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -115,7 +111,7 @@ const ProductosPage = () => {
 
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(parseInt(e.target.value));
-    setCurrentPage(1); // Resetear a primera página
+    setCurrentPage(1);
   };
 
   if (loading) {
@@ -203,7 +199,7 @@ const ProductosPage = () => {
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
-                setCurrentPage(1); // Resetear a página 1 al buscar
+                setCurrentPage(1);
               }}
               className={styles.searchInput}
             />

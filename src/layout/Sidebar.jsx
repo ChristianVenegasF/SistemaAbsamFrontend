@@ -1,39 +1,56 @@
 import { Link, useLocation } from "react-router-dom";
-import "./layout.css";
 
 const Sidebar = () => {
   const location = useLocation();
 
+  const menuItems = [
+    { path: "/", label: "📦 Productos", icon: "📦" },
+    { path: "/clientes", label: "👥 Clientes", icon: "👥" },
+    { path: "/ventas", label: "💰 Ventas", icon: "💰" },
+    { path: "/compras", label: "🛒 Compras", icon: "🛒" },
+  ];
+
   return (
     <aside className="sidebar">
-      <h2 className="logo"><img src="../assets/logoabsam.jpeg" alt="" /></h2>
+      <div className="logo">
+        <img src="../assets/logoabsam.jpeg" alt="Logo ABSAM" />
+        <h2 style={{ 
+          color: 'white', 
+          marginTop: '10px', 
+          fontSize: '1.2rem',
+          fontWeight: 'normal'
+        }}>
+          Sistema ABSAM
+        </h2>
+      </div>
 
       <nav className="menu">
-        <Link
-          to="/"
-          className={`menu-btn ${location.pathname === "/" ? "active" : ""}`}
-        >
-          Productos
-        </Link>
-        <Link
-          to="/clientes"
-          className={`menu-btn ${location.pathname === "/clientes" ? "active" : ""}`}
-        >
-          Clientes
-        </Link>
-        <Link
-          to="/ventas"
-          className={`menu-btn ${location.pathname === "/ventas" ? "active" : ""}`}
-        >
-          Ventas
-        </Link>
-        <Link
-          to="/compras"
-          className={`menu-btn ${location.pathname === "/compras" ? "active" : ""}`}
-        >
-          Compras
-        </Link>
+        {menuItems.map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={`menu-btn ${location.pathname === item.path ? "active" : ""}`}
+          >
+            <span style={{ marginRight: '10px' }}>{item.icon}</span>
+            {item.label}
+          </Link>
+        ))}
       </nav>
+
+      <div style={{ 
+        marginTop: '2rem', 
+        paddingTop: '1rem',
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+      }}>
+        <p style={{ 
+          color: '#a0a0c0', 
+          fontSize: '0.85rem', 
+          textAlign: 'center',
+          lineHeight: '1.4'
+        }}>
+          Sistema de Gestión<br />de Inventario
+        </p>
+      </div>
     </aside>
   );
 };

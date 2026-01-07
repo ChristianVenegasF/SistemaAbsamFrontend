@@ -37,7 +37,7 @@ export default function ComprasPage() {
             <tr key={p.idProducto}>
               <td>{p.nombre}</td>
               <td>{p.stock}</td>
-              <td>{p.precio}</td>
+              <td>S/.{p.precio.toLocaleString()}</td>
               <td>
                 <button
                   className={styles.button}
